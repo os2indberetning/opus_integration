@@ -43,7 +43,7 @@ public class OpusConverter {
             apiOrgUnit.setCostCenter(getValue(() -> kmdOrgUnit.getCostCenter().toString()));
             var apiAddress = new APIAddress();
             apiAddress.setStreet(kmdOrgUnit.getStreet());
-            apiAddress.setPostalCode(getValue(() -> kmdOrgUnit.getZipCode().toString()));
+            apiAddress.setPostalCode(getValue(() -> kmdOrgUnit.getZipCode(),(short)0));
             apiAddress.setCity(kmdOrgUnit.getCity());
             apiOrgUnit.setAddress(apiAddress);
             apiOrganization.orgUnits.add(apiOrgUnit);
@@ -68,7 +68,7 @@ public class OpusConverter {
             apiPerson.setLastName(kmdPerson.getLastName());
             var apiAddress = new APIAddress();
             apiAddress.setStreet(getValue(() -> kmdPerson.getAddress().getValue()));
-            apiAddress.setPostalCode(kmdPerson.getPostalCode());
+            apiAddress.setPostalCode(kmdPerson.getPostalCode().isBlank() ? 0 : Integer.parseInt(kmdPerson.getPostalCode()));
             apiAddress.setCity(kmdPerson.getCity());
             apiPerson.setAddress(apiAddress);
 

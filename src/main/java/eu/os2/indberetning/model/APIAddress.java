@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class APIAddress {
     private String street;
-    private String postalCode;
+    private int postalCode;
     private String city;
 }

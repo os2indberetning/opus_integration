@@ -45,7 +45,7 @@
 			</plugin>
 		</plugins>
 
-		<finalName>SofdCoreOpusIntegration</finalName>
+		<finalName>OS2indberetningOpusIntegration</finalName>
 	</build>
 
 	<dependencies>

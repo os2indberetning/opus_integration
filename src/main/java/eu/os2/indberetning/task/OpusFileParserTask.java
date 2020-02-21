@@ -53,10 +53,11 @@ public class OpusFileParserTask {
             var municipality = municipalityConfiguration.get();
 
             var newestOpusFile = s3Service.getNewestFilename(municipality.getBucket(),"opus");
-            var newestFerieFile = s3Service.getNewestFilename(municipality.getBucket(),"ferie");
+            var newestFerieFile = municipality.getType().equals("ferie") ? s3Service.getNewestFilename(municipality.getBucket(),"ferie") : null;
+
             var lastFiles = persistentMap.get(lastFilesPath);
-            var lastOpusFileName = lastFiles.get(municipality.getBucket() + ".opus");
-            var lastFerieFileName = lastFiles.get(municipality.getBucket() + ".ferie");
+            var lastOpusFileName = lastFiles.get(municipality.getTypeName() + ".opus");
+            var lastFerieFileName = lastFiles.get(municipality.getTypeName() + ".ferie");
 
             // only update if there is an opus file. Only update if either of the files have changed since last run
             if( newestOpusFile != null && (!newestOpusFile.equals(lastOpusFileName) || (newestFerieFile != null && !newestFerieFile.equals(lastFerieFileName))))
@@ -77,10 +78,10 @@ public class OpusFileParserTask {
                 log.info("Updating " + municipality.getName() + ". Orgunits: " + apiOrganization.orgUnits.size() + ". Persons: " + apiOrganization.persons.size());
                 os2indberetningStub.updateOrganization(municipality.getUrl(), municipality.getApiKey(), apiOrganization);
 
-                lastFiles.put(municipality.getBucket() + ".opus", newestOpusFile);
+                lastFiles.put(municipality.getTypeName() + ".opus", newestOpusFile);
                 if( newestFerieFile != null )
                 {
-                    lastFiles.put(municipality.getBucket() + ".ferie", newestFerieFile);
+                    lastFiles.put(municipality.getTypeName() + ".ferie", newestFerieFile);
                 }
                 persistentMap.save(lastFilesPath,lastFiles);
             }
